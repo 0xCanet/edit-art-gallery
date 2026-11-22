@@ -1,8 +1,10 @@
-# ÉDIT
+# PEINTURE
 
-J’ai repris ÉDIT après une première V1 réalisée pendant mon entretien. Pour le deuxième, je voulais aller plus loin sur l’UX/UI et avoir quelque chose à montrer et à manipuler.
+Le projet a commencé sous le nom ÉDIT. J’ai choisi PEINTURE pour le site.
 
-L’idée : entrer dans une galerie d’art lumineuse, passer d’un tableau à l’autre au scroll, puis s’arrêter sur une œuvre pour la regarder de près. J’ai gardé ÉDIT et choisi une direction plus luxe, avec une interface discrète et des œuvres présentées à partir de 500 000 €.
+J’ai repris la V1 réalisée pendant mon premier entretien. Pour le deuxième, je voulais aller plus loin sur l’UX/UI et avoir quelque chose à montrer et à manipuler.
+
+L’idée : entrer dans une galerie d’art lumineuse, passer d’un tableau à l’autre au scroll, puis s’arrêter sur une œuvre pour la regarder de près. J’étais parti d’ÉDIT avec une direction plus luxe, avec une interface discrète et des œuvres présentées à partir de 500 000 €.
 
 Ce dépôt accompagne ma présentation à Cauri. J’y montre le prototype, mais aussi les demandes, les retours et les choix qui l’ont fait évoluer.
 
