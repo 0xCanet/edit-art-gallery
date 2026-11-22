@@ -29,3 +29,11 @@ J’ai ensuite demandé de ralentir l’intro. Je voulais avoir le temps d’app
 [Voir le loader dans le navigateur](images/arrival-loader.jpg)
 
 Le compteur dure au moins 1,5 seconde et attend que la scène soit prête. Le fondu prend 1,4 seconde et l’approche se poursuit sur 3,6 secondes. La caméra reste dans l’axe du tableau, avec un léger zoom. Le scroll permet de reprendre la visite avant la fin du mouvement.
+
+## Le nom et les textes de l’interface
+
+J’ai choisi PEINTURE pour remplacer ÉDIT sur le site. Le mot reste centré dans la navigation et dans le loader. Sa taille s’adapte aux petits écrans pour garder les commandes accessibles.
+
+J’ai retiré la signature en bas de la salle, les mentions de démonstration et la ligne catégorie/année au-dessus de la fiche. J’ai aussi raccourci les textes et supprimé les phrases qui répétaient la même intention. Les limites fonctionnelles restent documentées dans le README.
+
+[La fiche allégée sur desktop](images/peinture-desktop.jpg)

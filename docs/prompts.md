@@ -94,6 +94,16 @@ Je voulais ralentir ce premier moment et mieux cadrer l’œuvre. Le loader atte
 
 Les tests vérifient que le compteur n’atteint pas 100 avant que la scène soit prête, ainsi que le rythme du fondu et le mouvement réduit. Un serveur local retardant volontairement les images de huit secondes a permis de vérifier l’attente et la commande pour continuer en vue fixe.
 
+## 9. Donner au site une identité plus nette
+
+> Go supprimer ce qui fait proto et IA.
+>
+> Pour Édit, au final je vais choisir PEINTURE (ou dans un autre langue, voir si y'en a un qui est stylé)
+
+Mes captures montraient les mentions de démonstration, la signature de la galerie et la ligne catégorie/année répétée au-dessus de la fiche. Je voulais alléger l’interface et lui donner un nom plus direct.
+
+Le site passe à PEINTURE. Les informations de l’œuvre restent dans la fiche ; les mentions répétées et les phrases décoratives disparaissent. Le formulaire garde son action de préparation et de copie du message. Les limites du projet et l’aide de Codex restent expliquées dans ce dépôt.
+
 ## Ce que je retiens pour la suite
 
 Mes retours sont devenus plus précis quand j’ai pu manipuler le prototype : le focus ne suffisait pas pour regarder une œuvre, une scène isolée ne suffisait pas pour visiter une galerie, et le zoom mobile demandait un travail propre aux gestes tactiles.

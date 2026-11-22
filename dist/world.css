@@ -316,3 +316,9 @@ body #header{background:linear-gradient(#faf9f6f7,#faf9f6c9 74%,#faf9f600);backd
 #arrival-continue{position:absolute;bottom:calc(32px + env(safe-area-inset-bottom));left:50%;transform:translateX(-50%);min-height:48px;padding:12px 18px;border:1px solid var(--line);font-size:14px;white-space:nowrap}
 #arrival-continue[hidden]{display:none}
 .is-loading{overflow:hidden}
+
+/* The wordmark keeps its centre line as the name gets longer. */
+@media(max-width:899px){#header .brand{font-size:clamp(24px,4.5vw,40px)}}
+@media(max-width:420px){#header .brand{font-size:24px}.loader-brand{font-size:clamp(38px,10vw,58px)}}
+@media(max-width:360px){#header .brand{font-size:18px}}
+.artwork-tabs{padding-top:8px}

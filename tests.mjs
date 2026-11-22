@@ -75,7 +75,7 @@ assert(!escapedMarkup.includes('<img src=x'));
 assert(escapedMarkup.includes('Justificatif non fourni'));
 const personal=artworkMarkup({...seed[0],demo:false,description:'Description personnelle'},false,'');
 assert(personal.includes('Description personnelle'));
-assert(!personal.includes('La lumière, mise en matière.'));
+assert(!personal.includes('Couleur et matière.'));
 assert(validWork({...seed[0],frame:undefined}));
 assert(!validWork({...seed[0],frame:'unknown'}));
 assert(!validWork({...seed[0],frame:'__proto__'}));
@@ -169,3 +169,17 @@ assert(advanceLoad(0,1,1000)<.05);
 let previous=1;
 for(let ms=0;ms<=APPROACH_MS;ms+=20){const value=arrivalState(1500+WHITE_HOLD_MS+ms,1,200).entrance;assert(value<=previous);previous=value;}
 console.log('Resource-gated loading, minimum counter duration, white fade and measured arrival passed.');
+
+const {refreshDemoPresentation}=await import('./dist/data.js');
+const oldCopy='Une composition lumineuse où les jaunes solaires rencontrent la profondeur du bleu. La matière et le geste invitent à s’approcher, puis à prendre du recul.';
+const savedExample={...seed[0],artist:'Collection ÉDIT',description:oldCopy,frame:'noir',price:700000};
+const refreshed=refreshDemoPresentation([savedExample])[0];
+assert.equal(refreshed.artist,seed[0].artist);assert.equal(refreshed.description,seed[0].description);
+assert.equal(refreshed.frame,'noir');assert.equal(refreshed.price,700000);assert.equal(refreshed.id,savedExample.id);
+assert.equal(savedExample.artist,'Collection ÉDIT');
+const personalCopy={...savedExample,artist:'Mon artiste',description:'Mon texte'};
+assert.equal(refreshDemoPresentation([personalCopy])[0],personalCopy);
+const personalWork={...savedExample,demo:false};assert.equal(refreshDemoPresentation([personalWork])[0],personalWork);
+const otherImage={...savedExample,image:'assets/oeuvre-05.jpg'};assert.equal(refreshDemoPresentation([otherImage])[0],otherImage);
+const newWork={...savedExample,id:'my-own-work'};assert.equal(refreshDemoPresentation([newWork])[0],newWork);
+console.log('Brand refresh preserves personal text, prices, frames and saved work IDs.');
