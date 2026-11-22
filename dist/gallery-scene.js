@@ -3,7 +3,7 @@ import {RoomEnvironment} from './vendor/RoomEnvironment.js';
 import {frames,frameFor,displayDimensions} from './frames.js';
 import {galleryArc} from './gallery-math.js';
 
-export async function createGalleryScene(canvas,works) {
+export async function createGalleryScene(canvas,works,onProgress=()=>{}) {
   const renderer=new THREE.WebGLRenderer({canvas,antialias:true,alpha:false,powerPreference:'low-power'});
   renderer.outputColorSpace=THREE.SRGBColorSpace;
   renderer.toneMapping=THREE.ACESFilmicToneMapping;
@@ -171,7 +171,8 @@ export async function createGalleryScene(canvas,works) {
     resources.forEach(item=>item.dispose());daylight.shadow.dispose();env.dispose();renderer.dispose();
   }
   // shortcut: all works are loaded for this small exhibition; stream bays for a large catalogue.
-  try {await Promise.all(works.map((work,index)=>updateWork(index,work)));} catch(error){dispose();throw error;}
+  let completed=0;
+  try {await Promise.all(works.map(async(work,index)=>{await updateWork(index,work);onProgress(++completed/Math.max(1,works.length));}));} catch(error){dispose();throw error;}
   const raycaster=new THREE.Raycaster(),pointer=new THREE.Vector2();
   return {
     updateWork,
@@ -190,13 +191,13 @@ export async function createGalleryScene(canvas,works) {
       const fit=size=>Math.max(size.outerH/(2*Math.tan(THREE.MathUtils.degToRad(camera.fov/2))*(freeH/height)*fill),size.outerW/(2*Math.tan(THREE.MathUtils.degToRad(camera.fov/2))*camera.aspect*(freeW/width)*fill));
       const from=Math.min(displays.length-1,Math.floor(state.position)),to=Math.min(displays.length-1,from+1);
       const arc=galleryArc(state,mobile),entrance=state.entrance||0,zoom=state.zoom||1;
-      const distance=THREE.MathUtils.lerp(fit(displays[from].size),fit(displays[to].size),state.position-from)/zoom+arc.pullback*(1-focus)+entrance*2.2;
+      const distance=THREE.MathUtils.lerp(fit(displays[from].size),fit(displays[to].size),state.position-from)/zoom+arc.pullback*(1-focus)+entrance*.85;
       activeIndex=Math.round(state.position);const size=displays[activeIndex].size;
       const x=state.position*step+(state.panX||0)*size.w,y=1.7+(state.panY||0)*size.h;
-      const yaw=(1-focus)*(.20+arc.sway)+(state.angle||0)*.32+entrance*.17;
+      const yaw=(1-focus)*arc.sway+(state.angle||0)*.32;
       camera.setViewOffset(width,height,layout.right/2,(layout.bottom-layout.top)/2,width,height);
-      camera.position.set(x+Math.sin(yaw)*distance-entrance*.65,y+(state.inspecting?0:.12)+arc.rise*(1-focus)+entrance*.15,Math.cos(yaw)*distance+.09);
-      camera.lookAt(x,y-(state.inspecting?0:.04)+(1-focus)*.30,.09);
+      camera.position.set(x+Math.sin(yaw)*distance,y+arc.rise*(1-focus),Math.cos(yaw)*distance+.09);
+      camera.lookAt(x,y,.09);
       renderer.render(room,camera);
     },
     artworkBounds() {

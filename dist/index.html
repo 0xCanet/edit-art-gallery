@@ -5,14 +5,16 @@
 <meta name="theme-color" content="#faf9f6"><meta name="description" content="Une galerie lumineuse en trois dimensions. Découvrez la sélection ÉDIT, à partir de 500 000 euros. Prototype de démonstration.">
 <title>ÉDIT — La galerie de lumière</title>
 <link rel="icon" href="assets/favicon.svg" type="image/svg+xml"><link rel="stylesheet" href="assets/fonts.css"><link rel="stylesheet" href="style.css"><link rel="stylesheet" href="gallery.css"><link rel="stylesheet" href="artwork.css"><link rel="stylesheet" href="world.css">
+<style>#arrival-loader{position:fixed;inset:0;z-index:100;background:#fff}#arrival-loader[hidden]{display:none}</style>
 </head>
 <body>
+<section id="arrival-loader" aria-label="Entrée dans la galerie"><div class="loader-copy"><p class="loader-brand" aria-hidden="true">ÉDIT</p><div id="arrival-progress" role="progressbar" aria-label="Préparation de la galerie" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0"><p class="loader-count" aria-hidden="true"><span>0</span><small>%</small></p><div class="loader-track" aria-hidden="true"><span></span></div></div></div><button type="button" id="arrival-continue" hidden>Continuer en vue fixe</button></section>
 <a class="skip" href="#main">Aller au contenu</a>
 <div id="gallery-world"></div>
 <header id="header"></header>
 <main id="main" tabindex="-1"></main>
 <footer id="footer"></footer>
 <div id="toast" class="toast" role="status" aria-live="polite"></div>
-<noscript><p>Activez JavaScript pour explorer la galerie et gérer les œuvres.</p></noscript>
+<noscript><style>#arrival-loader{display:none}</style><p>Activez JavaScript pour explorer la galerie et gérer les œuvres.</p></noscript>
 <script type="module" src="app.js"></script>
 </body></html>

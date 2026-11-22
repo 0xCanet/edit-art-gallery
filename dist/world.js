@@ -1,15 +1,21 @@
 import {frameFor,frames} from './frames.js';
+import {arrivalState,advanceLoad,MIN_LOAD_MS} from './arrival.js';
 import {clamp,dampProgress,galleryState,inspectionView,transformInspection,inspectionGesture} from './gallery-math.js';
 
 export function createWorld(host,onSelect) {
   const cross='<svg viewBox="0 0 24 24" aria-hidden="true"><path d="m6 6 12 12M18 6 6 18"/></svg>';
-  host.innerHTML=`<div class="world-visual" role="img" aria-label="Galerie ÉDIT"><div class="world-fallback"><img alt="" hidden><p>Importez un visuel pour préparer l’accrochage.</p></div><canvas aria-hidden="true"></canvas></div><div class="world-tools"><a class="world-exit" href="#galerie" hidden>${cross}Quitter l’œuvre</a><button type="button" class="world-inspect" hidden>Explorer les détails</button><button type="button" class="world-mode" aria-pressed="false">Vue sans animation</button><button type="button" class="world-angle" aria-pressed="false">Voir le cadre de côté</button><p class="world-status" role="status"></p></div><div class="inspection-controls" hidden><button type="button" class="inspection-back">Revenir à la fiche</button><div class="inspection-zoom" role="group" aria-label="Explorer les détails du tableau"><button type="button" data-zoom="out" aria-label="Dézoomer">−</button><output aria-label="Niveau de zoom">100 %</output><button type="button" data-zoom="in" aria-label="Zoomer">+</button><button type="button" data-zoom="reset">Recentrer</button></div><p><span class="inspection-touch-hint">Pincez pour zoomer · Glissez pour explorer</span><span class="inspection-pointer-hint">Molette pour zoomer · Faites glisser pour explorer</span></p></div><p class="world-arrival" aria-hidden="true">Le temps de regarder.</p><p class="world-signature">ÉDIT · Galerie de lumière <span>Œuvres et prix de démonstration</span></p>`;
+  host.innerHTML=`<div class="world-visual" role="img" aria-label="Galerie ÉDIT"><div class="world-fallback"><img alt="" hidden><p>Importez un visuel pour préparer l’accrochage.</p></div><canvas aria-hidden="true"></canvas></div><div class="world-tools"><a class="world-exit" href="#galerie" hidden>${cross}Quitter l’œuvre</a><button type="button" class="world-inspect" hidden>Explorer les détails</button><button type="button" class="world-mode" aria-pressed="false">Vue sans animation</button><button type="button" class="world-angle" aria-pressed="false">Voir le cadre de côté</button><p class="world-status" role="status"></p></div><div class="inspection-controls" hidden><button type="button" class="inspection-back">Revenir à la fiche</button><div class="inspection-zoom" role="group" aria-label="Explorer les détails du tableau"><button type="button" data-zoom="out" aria-label="Dézoomer">−</button><output aria-label="Niveau de zoom">100 %</output><button type="button" data-zoom="in" aria-label="Zoomer">+</button><button type="button" data-zoom="reset">Recentrer</button></div><p><span class="inspection-touch-hint">Pincez pour zoomer · Glissez pour explorer</span><span class="inspection-pointer-hint">Molette pour zoomer · Faites glisser pour explorer</span></p></div><p class="world-signature">ÉDIT · Galerie de lumière <span>Œuvres et prix de démonstration</span></p>`;
   const canvas=host.querySelector('canvas'),image=host.querySelector('img'),status=host.querySelector('.world-status'),toggle=host.querySelector('.world-mode');
   const inspectButton=host.querySelector('.world-inspect'),inspectionControls=host.querySelector('.inspection-controls'),back=host.querySelector('.inspection-back');
   const motion=matchMedia('(prefers-reduced-motion: reduce)');
   let flat=motion.matches,scene=null,desired=[],loaded=[],identity='',loadingIdentity='',generation=0,frame=0,lastTime=0;
-  let mode='visit',panel=null,callback=null,inspecting=false,arrivalDone=false,arrivalStart=0;
-  let current={progress:0,focus:0,angle:0,right:0,bottom:150,top:88,zoom:1,x:0,y:0},target={...current};
+  let mode='visit',panel=null,callback=null,inspecting=false,arrivalCancelled=false;
+  const loader=document.querySelector('#arrival-loader'),progressbar=document.querySelector('#arrival-progress'),count=loader.querySelector('.loader-count span');
+  const started=performance.now();
+  let loadingProgress=0,displayedProgress=0,readyAt=null,fontsReady=false,fallbackReady=false,sceneReady=false,loaderRemoved=false;
+  document.body.classList.add('is-loading');host.inert=true;document.querySelector('.skip').inert=true;document.querySelector('#main').inert=true;document.querySelector('#header').inert=true;
+  Promise.allSettled([document.fonts.load('400 64px Newsreader'),document.fonts.load('400 16px "DM Sans"')]).then(()=>{fontsReady=true;loadingProgress=Math.max(loadingProgress,.1);schedule();});
+  let current={progress:0,focus:0,angle:0,right:0,bottom:150,top:88,zoom:1,x:0,y:0,entrance:1},target={...current};
   const key=work=>JSON.stringify([work.id,work.image,frameFor(work)]);
   const observer=new ResizeObserver(layout),pointers=new Map();
   let gesture=null,dragged=false,tap=null,lastTap=null,lastScroll=0,renderedView=inspectionView(),rebound=false,viewportWidth=innerWidth;
@@ -25,24 +31,37 @@ export function createWorld(host,onSelect) {
     target.bottom=inspecting?(mobile&&hint?.height?innerHeight-hint.top+12:100):bounds&&mobile?Math.max(0,innerHeight-bounds.top):mode==='visit'?(document.querySelector('.gallery-cartel')?.getBoundingClientRect().height||150):0;
     schedule();
   }
-  function stopArrival(){arrivalStart=0;arrivalDone=true;host.dataset.arriving='false';}
+  function stopArrival(){arrivalCancelled=true;target.entrance=0;host.dataset.arriving='false';}
+  document.querySelector('#arrival-continue').addEventListener('click',()=>{flat=true;updateMode();readyAt=performance.now()-started;});
   function draw(time=performance.now()){
     frame=0;
     const dt=lastTime?time-lastTime:16.67,snap=flat||motion.matches||!scene;
-    let moving=false;
+    const resourcesReady=fontsReady&&(flat?fallbackReady:sceneReady);
+    displayedProgress=advanceLoad(displayedProgress,resourcesReady?1:loadingProgress,dt);
+    if(readyAt===null&&resourcesReady&&displayedProgress>=1&&time-started>=MIN_LOAD_MS)readyAt=time-started;
+    const intro=arrivalState(time-started,displayedProgress,readyAt,flat||motion.matches);
+    target.entrance=mode==='visit'&&!arrivalCancelled?intro.entrance:0;
+    let moving=!loaderRemoved||(!arrivalCancelled&&intro.phase!=='settled');
     for(const field of Object.keys(current)){current[field]=snap?target[field]:dampProgress(current[field],target[field],dt);if(current[field]!==target[field])moving=true;}
-    let entrance=0;
-    if(arrivalStart&&!snap){const t=clamp((time-arrivalStart)/1600,0,1);entrance=(1-t)**3;if(t<1)moving=true;else stopArrival();}
+    host.dataset.arriving=String(mode==='visit'&&!arrivalCancelled&&readyAt!==null&&current.entrance>0);
+    if(!loaderRemoved){
+      loader.dataset.phase=intro.phase;loader.style.opacity=intro.veil;
+      loader.querySelector('.loader-copy').style.opacity=intro.copy;
+      count.textContent=intro.percent;progressbar.setAttribute('aria-valuenow',String(intro.percent));
+      loader.querySelector('.loader-track span').style.transform=`scaleX(${intro.percent/100})`;
+      document.querySelector('#arrival-continue').hidden=!intro.canContinue;
+      if(intro.percent===100&&intro.veil===0){loader.hidden=true;loaderRemoved=true;host.inert=false;document.querySelector('.skip').inert=false;document.body.classList.remove('is-loading');document.querySelector('#main').inert=inspecting;document.querySelector('#header').inert=false;}
+    }
     const state=galleryState(current.progress,Math.max(1,desired.length)),work=desired[state.index];
     if(work){
-      if(image.dataset.source!==work.image){image.dataset.source=work.image||'';if(work.image)image.src=work.image;else image.removeAttribute('src');}
+      if(image.dataset.source!==work.image){image.dataset.source=work.image||'';fallbackReady=!work.image;if(work.image){image.src=work.image;image.decode().catch(()=>{}).then(()=>{fallbackReady=true;schedule();});}else image.removeAttribute('src');}
       image.hidden=!work.image;host.querySelector('.world-fallback p').hidden=!!work.image;
       host.querySelector('.world-visual').setAttribute('aria-label',`Galerie ÉDIT : ${work.title||'Aperçu'}, ${frames[frameFor(work)].label}`);
       host.dataset.frame=frameFor(work);
     }
     host.style.setProperty('--world-right',`${current.right}px`);host.style.setProperty('--world-bottom',`${current.bottom}px`);host.style.setProperty('--world-top',`${current.top}px`);
     image.style.transform=inspecting?`scale(${current.zoom}) translate(${-current.x*100}%,${current.y*100}%)`:'';
-    if(scene&&!flat)scene.render({...state,focus:current.focus,angle:current.angle,entrance,zoom:current.zoom,panX:current.x,panY:current.y,inspecting},innerWidth,innerHeight,current);
+    if(scene&&!flat){scene.render({...state,focus:current.focus,angle:current.angle,entrance:current.entrance,zoom:current.zoom,panX:current.x,panY:current.y,inspecting},innerWidth,innerHeight,current);sceneReady=true;loadingProgress=Math.max(loadingProgress,.96);}
     renderedView={zoom:current.zoom,x:current.x,y:current.y};
     if(rebound&&!moving){
       rebound=false;const bounds=artworkBounds();
@@ -52,7 +71,7 @@ export function createWorld(host,onSelect) {
       }
     }
     if(mode==='visit')callback?.({...state,progress:current.progress});
-    if(moving&&!flat&&scene){lastTime=time;schedule();}else{lastTime=0;host.dataset.settled='true';}
+    if(moving&&(!loaderRemoved||(!flat&&scene))){lastTime=time;schedule();}else{lastTime=0;host.dataset.settled='true';}
   }
   async function sync(next){
     desired=next.length?next.map(work=>({...work})):[{id:'empty-gallery',title:'La galerie se prépare',image:'',frame:'chene'}];
@@ -66,16 +85,16 @@ export function createWorld(host,onSelect) {
     }
     if(loadingIdentity===nextIdentity)return;
     const request=++generation,snapshot=desired.map(work=>({...work}));
-    loadingIdentity=nextIdentity;scene?.dispose();scene=null;host.classList.remove('world-ready');
+    loadingIdentity=nextIdentity;scene?.dispose();scene=null;sceneReady=false;if(!loaderRemoved&&Number(progressbar.getAttribute('aria-valuenow'))<100)readyAt=null;host.classList.remove('world-ready');
     status.textContent='Préparation de la galerie…';schedule();
     try{
       const {createGalleryScene}=await import('./gallery-scene.js');
       if(request!==generation)return;
-      const nextScene=await createGalleryScene(canvas,snapshot);
+      loadingProgress=Math.max(loadingProgress,.2);
+      const nextScene=await createGalleryScene(canvas,snapshot,value=>{if(request===generation){loadingProgress=Math.max(loadingProgress,.2+.65*value);schedule();}});
       if(request!==generation){nextScene.dispose();return;}
       scene=nextScene;identity=nextIdentity;loadingIdentity='';loaded=snapshot.map(key);
       await sync(desired);host.classList.add('world-ready');status.textContent='';
-      if(!arrivalDone&&mode==='visit'&&!motion.matches){arrivalDone=true;arrivalStart=performance.now();host.dataset.arriving='true';}
       schedule();
     }catch(error){
       if(request!==generation)return;
