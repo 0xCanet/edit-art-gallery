@@ -14,6 +14,8 @@ Ce dépôt accompagne ma présentation à Cauri. J’y montre le prototype, mais
 
 Au départ, j’ai demandé une direction artistique, puis des maquettes desktop et mobile avant de passer au prototype. Le fil conducteur est resté le même : donner envie de regarder une œuvre et laisser le temps de la découvrir.
 
+À l’ouverture, un compteur de 0 à 100 reste au moins 1,5 seconde sur fond blanc. Il attend les polices, les textures et le premier rendu de la galerie. Le blanc s’efface ensuite et la caméra s’approche lentement du tableau, dans son axe. Un scroll permet de reprendre la main.
+
 Le parcours se joue en deux temps. Je scroll dans la galerie et une œuvre m’attire. Un premier clic ouvre sa fiche et rapproche la caméra. Un second clic sur le tableau permet de zoomer et de se déplacer dans l’image. La sortie reste visible pour reprendre la visite.
 
 J’ai aussi voulu relier la mise en ligne d’une œuvre à son accrochage. Dans l’atelier, je peux importer un visuel et choisir son cadre. Le résultat apparaît directement dans la salle, puis ce choix reste attaché à la fiche publiée.
@@ -106,6 +108,7 @@ Pour la suite, je commencerais par les essais sur téléphone, puis par le stock
 | --- | --- |
 | `dist/app.js` | Navigation, catalogue et atelier |
 | `dist/world.js` | Scène persistante et interactions |
+| `dist/arrival.js` | Progression du chargement et rythme de l’arrivée |
 | `dist/gallery-scene.js` | Salle, matériaux, lumières et cadres en 3D |
 | `dist/gallery-math.js` | Calculs du scroll, du zoom et des gestes |
 | `dist/artwork.js` | Fiche et demande d’acquisition |

@@ -86,6 +86,14 @@ Je voulais que le dépôt raconte ma démarche dans ma voix, en plus de donner a
 
 L’historique GitHub commence par l’import de la version fonctionnelle. La documentation et la préparation du déploiement passent ensuite par une branche avec des commits séparés et une PR. Je n’ai pas fabriqué un historique de commits pour les itérations réalisées avant l’ouverture du dépôt.
 
+## 8. Laisser le temps d’entrer dans la galerie
+
+> Maintenant, je veux qu’on améliore l’interface, l’intro est bien mais trop rapide, ça ne laisse pas le temps d’apprécier l’arrivée. On doit avoir un loader de 0 à 100 qui dure 1 à 2 secondes (mais également en fonction du chargement du site. On arrive sur écran blanc puis fondu jusqu’à l’oeuvre, léger zoom dans la galerie d’art avec une arrivée plus centrée, milimétrée.
+
+Je voulais ralentir ce premier moment et mieux cadrer l’œuvre. Le loader attend les ressources réellement nécessaires au premier rendu. Sur une connexion rapide, le compteur reste au moins 1,5 seconde ; si les œuvres mettent plus longtemps à charger, il attend. Le blanc disparaît ensuite progressivement pendant une approche légère et frontale.
+
+Les tests vérifient que le compteur n’atteint pas 100 avant que la scène soit prête, ainsi que le rythme du fondu et le mouvement réduit. Un serveur local retardant volontairement les images de huit secondes a permis de vérifier l’attente et la commande pour continuer en vue fixe.
+
 ## Ce que je retiens pour la suite
 
 Mes retours sont devenus plus précis quand j’ai pu manipuler le prototype : le focus ne suffisait pas pour regarder une œuvre, une scène isolée ne suffisait pas pour visiter une galerie, et le zoom mobile demandait un travail propre aux gestes tactiles.

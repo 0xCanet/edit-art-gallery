@@ -139,3 +139,33 @@ assert(Object.values(inspectionGesture(inspectionView(),[{x:0,y:0},{x:0,y:0}],[{
 const portrait=transformInspection(inspectionView(),{left:75,top:0,width:150,height:400},viewArea,{x:150,y:200},{x:250,y:200},1.5);
 assert.equal(Math.abs(portrait.x),0);
 console.log('Touch pinch anchor, centroid movement, pan scale, handoff and edge limits passed.');
+
+const {arrivalState,advanceLoad,MIN_LOAD_MS,WHITE_HOLD_MS,REVEAL_MS,APPROACH_MS}=await import('./dist/arrival.js');
+assert.equal(arrivalState(0,0).percent,0);
+assert.equal(arrivalState(1000,1,200).phase,'loading');
+assert(arrivalState(1000,1,200).percent<100);
+assert.equal(arrivalState(MIN_LOAD_MS,1,200).percent,100);
+assert.equal(arrivalState(10000,.85).percent,85);
+assert.equal(arrivalState(10000,1).percent,99);
+assert.equal(arrivalState(6000,.7).canContinue,false);
+assert.equal(arrivalState(7000,.7).canContinue,true);
+assert.equal(arrivalState(5000,1,5000).phase,'white');
+const revealed=arrivalState(1500+WHITE_HOLD_MS+REVEAL_MS,1,200);
+assert.equal(revealed.veil,0);assert.equal(revealed.phase,'arriving');
+assert(revealed.entrance>0&&revealed.entrance<1);
+const complete=arrivalState(1500+WHITE_HOLD_MS+APPROACH_MS,1,200);
+assert.equal(complete.entrance,0);assert.equal(complete.phase,'settled');
+assert.equal(arrivalState(1500+WHITE_HOLD_MS+180,1,200,true).phase,'settled');
+assert.equal(arrivalState(0,0,null,true).entrance,0);
+const initial=arrivalState(1500+WHITE_HOLD_MS+100,1,200);
+assert(initial.entrance>.99);
+let loading=0;
+for(let i=0;i<30;i++)loading=advanceLoad(loading,.2,1000/60);
+assert.equal(loading,.2);
+assert.equal(advanceLoad(loading,.1,16),.2);
+for(let i=0;i<100;i++)loading=advanceLoad(loading,1,1000/60);
+assert.equal(loading,1);
+assert(advanceLoad(0,1,1000)<.05);
+let previous=1;
+for(let ms=0;ms<=APPROACH_MS;ms+=20){const value=arrivalState(1500+WHITE_HOLD_MS+ms,1,200).entrance;assert(value<=previous);previous=value;}
+console.log('Resource-gated loading, minimum counter duration, white fade and measured arrival passed.');

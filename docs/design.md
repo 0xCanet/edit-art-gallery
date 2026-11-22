@@ -21,3 +21,11 @@ J’ai gardé la salle lumineuse et les typographies Newsreader et DM Sans. Mes 
 La 3D reste présente quand j’ouvre le catalogue, une fiche ou l’atelier. Sur mobile, je garde le tableau au-dessus de la fiche, puis je passe en exploration pour le regarder en plein écran. Les commandes de sortie restent en bas.
 
 Le [document de design de la V1](archive/design-v1.md) est conservé comme archive. Il décrit le premier site, avant la galerie globale. Ses règles de mise en page et d’élévation ne décrivent pas la version actuelle.
+
+## L’arrivée dans la galerie
+
+J’ai ensuite demandé de ralentir l’intro. Je voulais avoir le temps d’apprécier l’arrivée, avec un compteur de chargement puis un fondu depuis le blanc.
+
+[Voir le loader dans le navigateur](images/arrival-loader.jpg)
+
+Le compteur dure au moins 1,5 seconde et attend que la scène soit prête. Le fondu prend 1,4 seconde et l’approche se poursuit sur 3,6 secondes. La caméra reste dans l’axe du tableau, avec un léger zoom. Le scroll permet de reprendre la visite avant la fin du mouvement.
