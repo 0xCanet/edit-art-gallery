@@ -20,6 +20,8 @@ Je teste aussi le parcours concerné dans le navigateur. Pour une modification d
 
 J’ouvre ensuite une PR vers `main`. Sa description explique le problème et le comportement obtenu, avec les vérifications réalisées et les limites restantes. Je joins une capture quand le rendu change. Je ne présente pas un contrôle automatisé comme une validation humaine.
 
-Les checks GitHub et la preview Vercel permettent de contrôler la branche avant fusion. Le projet ne dépend d’aucun secret pour ses tests. Je garde les identifiants de déploiement, fichiers `.env` et données personnelles hors du dépôt.
+La protection de `main` exige une PR et le check `Syntax and tests`, y compris pour mon compte. Elle bloque aussi les pushs forcés. Je n’ai pas encore configuré d’approbation par une autre personne ; une fusion après les checks ne vaut donc pas revue humaine.
+
+Les checks GitHub et la preview Vercel permettent de contrôler la branche avant fusion. La démo de production est publique ; les previews gardent la protection Vercel. Le projet ne dépend d’aucun secret pour ses tests. Je garde les identifiants de déploiement, fichiers `.env` et données personnelles hors du dépôt.
 
 Les images importées par un visiteur restent dans son navigateur. Pour enrichir les exemples versionnés, je vérifie les droits du visuel et je mets à jour les crédits.
