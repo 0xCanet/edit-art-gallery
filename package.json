@@ -1,0 +1,13 @@
+{
+  "name": "edit-art-gallery",
+  "version": "0.1.0",
+  "private": true,
+  "description": "ÉDIT, prototype de galerie d’art immersive et atelier de publication.",
+  "type": "module",
+  "engines": { "node": "22.x" },
+  "scripts": {
+    "check": "node scripts/check.mjs",
+    "test": "node tests.mjs",
+    "start": "python3 -m http.server 4173 --directory dist"
+  }
+}
