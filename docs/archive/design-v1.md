@@ -1,3 +1,5 @@
+> Archive de la V1. Les choix ci-dessous précèdent la galerie 3D globale. Voir [la direction actuelle](../design.md).
+
 ---
 name: "ÉDIT (provisoire)"
 description: "Galerie et atelier : le catalogue ouvert."

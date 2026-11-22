@@ -1,51 +1,125 @@
-# ÉDIT — galerie immersive et atelier
+# ÉDIT
 
-Prototype de marketplace d’art en français. HTML/CSS/JavaScript natifs et Three.js 0.187.0 embarqué localement ; aucun CDN ni installation pour lancer la visite.
+J’ai repris ÉDIT après une première V1 réalisée pendant mon entretien. Pour le deuxième, je voulais aller plus loin sur l’UX/UI et avoir quelque chose à montrer et à manipuler.
 
-## Lancer et vérifier
+L’idée : entrer dans une galerie d’art lumineuse, passer d’un tableau à l’autre au scroll, puis s’arrêter sur une œuvre pour la regarder de près. J’ai gardé ÉDIT et choisi une direction plus luxe, avec une interface discrète et des œuvres présentées à partir de 500 000 €.
 
-`python3 -m http.server 4173 --directory dist`
+Ce dépôt accompagne ma présentation à Cauri. J’y montre le prototype, mais aussi les demandes, les retours et les choix qui l’ont fait évoluer.
 
-Ouvrir http://localhost:4173. Le configurateur se trouve dans `/#atelier`. Tests : `node tests.mjs`.
+[Essayer la démo](https://edit-art-gallery.vercel.app) · [Lire mes prompts](docs/prompts.md) · [Comprendre le code](docs/architecture.md)
 
-## Expérience
+![La galerie sur ordinateur](docs/images/gallery-desktop.jpg)
 
-Une scène persistante constitue le fond de toute l’application. La caméra traverse les accrochages au scroll natif, avec commandes précédent/suivant et clavier. Le catalogue, la sélection, les fiches et l’atelier sont des panneaux superposés à la même salle. Une arrivée de caméra de 1,6 seconde révèle la salle puis se pose devant le premier tableau. Elle est interrompue dès la première interaction et désactivée en mouvement réduit. La trajectoire entre deux accrochages recule, décrit un léger arc et se rapproche à nouveau. Le logo est centré dans une navigation intégrée en haut de la salle.
+## Ce que je voulais travailler
 
-Un premier clic sur un tableau 3D ouvre sa fiche ; un second clic sur le tableau (ou « Explorer les détails ») passe en exploration. La fiche se retire sans perdre son contenu. Le zoom est limité de 100 à 400 %, avec déplacement par glisser, molette, pincement à deux doigts et commandes clavier (+/−, flèches, 0). Les bornes du déplacement suivent le niveau de zoom. « Revenir à la fiche » et Échap quittent l’exploration ; « Quitter l’œuvre » revient directement à la visite à la même œuvre. Le formulaire d’acquisition reste en place après l’exploration. Le zoom affiche les pixels du fichier disponible, sans reconstituer des détails absents. Sur mobile, les panneaux occupent le bas de l’écran et la salle reste visible au-dessus ; en paysage, ils passent sur le côté.
+Au départ, j’ai demandé une direction artistique, puis des maquettes desktop et mobile avant de passer au prototype. Le fil conducteur est resté le même : donner envie de regarder une œuvre et laisser le temps de la découvrir.
 
-La salle comprend murs et plafond, verrières, rails et projecteurs, sol minéral avec joints, bancs, cartels et sculpture. L’environnement fournit les reflets ; la lumière naturelle passe par les ouvertures de la salle et projette des ombres VSM filtrées. Les enduits, la pierre veinée et mouchetée, le bois et les métaux brossés utilisent des textures et des reliefs procéduraux. Les cartes d’ombres sont actualisées à la création, au changement d’accrochage ou de cadre et au redimensionnement, puis réutilisées pendant les mouvements.
+Le parcours se joue en deux temps. Je scroll dans la galerie et une œuvre m’attire. Un premier clic ouvre sa fiche et rapproche la caméra. Un second clic sur le tableau permet de zoomer et de se déplacer dans l’image. La sortie reste visible pour reprendre la visite.
 
-Chaque tableau possède une épaisseur et un cadre biseauté en géométrie. Le configurateur propose chêne naturel, bois noir, laiton brossé, doré mouluré ou sans cadre. Le résultat apparaît immédiatement dans la salle ; la vue de côté montre le relief. Le choix est sauvegardé et repris dans la vitrine, la fiche et le brouillon d’acquisition. Les anciennes œuvres sans champ de cadre restent compatibles (chêne par défaut). Les proportions de l’image sont conservées ; l’échelle de présentation est adaptée à la salle et ne constitue pas une simulation métrique des dimensions déclarées.
+J’ai aussi voulu relier la mise en ligne d’une œuvre à son accrochage. Dans l’atelier, je peux importer un visuel et choisir son cadre. Le résultat apparaît directement dans la salle, puis ce choix reste attaché à la fiche publiée.
 
-Les images JPG/PNG/WebP sont réduites à 1400 px avant stockage. Brouillons, publication, retrait, modification, favoris et recherche sont disponibles. La vue sans animation et le repli en cas d’échec WebGL conservent les commandes HTML et les formulaires.
+## Comment j’ai avancé
 
-Le rendu s’arrête au repos. L’amorti est calculé selon le temps écoulé ; résolution limitée à 1,4× sur mobile et 1,75× sur desktop. Le moteur reste actif entre les pages et libère la scène lors d’un changement de composition de l’exposition. Cette version charge toutes les œuvres de la petite exposition ; un grand catalogue demanderait un chargement progressif et une limitation des éclairages.
+J’ai travaillé par retours successifs sur ce que je voyais. Quand un rendu allait dans la bonne direction, je le gardais et je précisais le point suivant. Quand il passait à côté de l’idée, je reformulais.
 
-## Gestes et lecture sur mobile
+Le retour qui a le plus changé le projet est celui-ci :
 
-La visite conserve le scroll natif. Chaque étape dispose de 145 svh ; après la fin du défilement, la caméra se pose sur l’accrochage le plus proche. Cette aide attend la fin du contact et ne s’active pas pendant un zoom de page. La hauteur visible suit les barres du navigateur sans changer la distance de visite entre les œuvres ; une rotation conserve l’œuvre courante.
+> Là tu as utilisé la 3D que pour une section, je veux que ce soit l’expérience globale
 
-En portrait, l’exploration commence à 100 %, œuvre entière. Les sorties « Quitter l’œuvre » et « Revenir à la fiche » sont regroupées en bas avec les commandes de zoom, au-dessus de la zone de sécurité du téléphone. Les cibles font au moins 44 px. Le zoom et le glisser suivent directement les doigts, sans amorti de caméra. Le pincement conserve le détail sous son centre mobile, calculé à partir des dimensions projetées du tableau ; les limites de déplacement tiennent compte du cadrage réel. Le passage de deux doigts à un doigt réinitialise le geste sur la vue visible. Un double toucher zoome sur le point visé ou revient à 100 %. Les annulations de contact libèrent le geste ; un scroll ne déclenche pas une ouverture d’œuvre.
+La première scène fonctionnait, mais je voulais un décor de galerie, de la lumière, des ombres et de vrais cadres. À partir de là, la salle est devenue le fond de toute l’expérience. Le catalogue, la fiche et le configurateur s’ouvrent dans cette même scène.
 
-Le moteur évite les calculs de survol pendant les gestes tactiles et conserve les cartes d’ombres quand seule la hauteur du navigateur change. Les tests numériques vérifient le point d’ancrage, le déplacement du centre du pincement, la correspondance du déplacement en pixels, la reprise à un doigt, les limites et les contacts confondus. Le rendu et les sorties sont contrôlés en portrait, paysage et desktop dans le navigateur ; les gestes et performances sur iPhone/Android physiques restent à valider.
+| Ma demande | Ce qu’elle a fait évoluer |
+| --- | --- |
+| Poser une DA luxe et visualiser l’idée avant de coder | Maquettes desktop et mobile, salle blanche et lumineuse, typographie éditoriale |
+| Passer au prototype avec des transitions au scroll | Parcours entre les tableaux dans une scène 3D |
+| Travailler la fiche pour des œuvres à partir de 500 000 € | Histoire du tableau, informations, dossier et prise de contact |
+| Faire de la 3D l’expérience globale | Salle persistante et cadres reliés au configurateur |
+| Pouvoir s’arrêter et regarder les détails | Focus, zoom, déplacement dans l’œuvre et sortie plus visible |
+| Repenser l’usage mobile | Pincement centré sous les doigts, commandes en bas et arrêt du scroll devant un tableau |
 
-## Œuvres et acquisition
+J’ai conservé les [prompts et le détail de ces retours](docs/prompts.md). Les [premières maquettes](docs/design.md) sont aussi dans le dépôt pour comparer l’intention et le prototype.
 
-Prix minimum : 500 000 €. Exemples : 500 000 €, 780 000 €, 1 250 000 €. Les anciens exemples inchangés sont réévalués en mémoire ; les données personnelles sont conservées. Une œuvre personnelle sous le seuil reste accessible dans l’atelier et quitte la vitrine jusqu’à sa réévaluation.
+## Ma place et celle de l’IA
 
-La fiche propose trois onglets : l’œuvre et son histoire, le dossier, l’acquisition. Le visuel source est agrandissable dans un dialogue natif. Les textes éditoriaux des exemples sont illustratifs ; aucune provenance ou certification n’est inventée.
+J’ai utilisé Codex pour m’aider à produire les maquettes, développer le prototype, écrire les tests et préparer cette documentation. Mes demandes fixent la direction, puis mes retours servent à corriger le rendu et le parcours.
 
-Le formulaire prépare un message contextualisé, modifiable et copiable. Aucune coordonnée n’est stockée ni transmise. Le destinataire n’a pas été fourni : `acquisitionEmail` reste vide dans `dist/acquisition.js`. Une fois renseigné, un lien permettra au visiteur d’ouvrir sa messagerie ; il gardera la main sur l’envoi.
+Je préfère montrer cette façon de travailler telle qu’elle est. Le code a été développé avec une assistance IA ; les échanges permettent de voir ce que j’ai demandé, ce que j’ai remis en question et où j’ai voulu pousser le projet.
 
-## Périmètre du prototype
+La première demande prévoyait un speedrun de huit heures. C’était le budget de travail visé, pas une durée mesurée que je peux certifier.
 
-Les œuvres et favoris sont conservés dans le stockage local du navigateur (`edit-artworks-v1`, `edit-favorites-v1`). Ils ne sont pas partagés entre visiteurs, navigateurs ou appareils. Effacer les données du site efface le catalogue créé ; la dernière sauvegarde prévaut entre plusieurs onglets. Une erreur de quota conserve les champs à l’écran.
+## Essayer le prototype
 
-Pas de compte vendeur, serveur, paiement, commande ou livraison. Les œuvres et prix sont des démonstrations. Le rendu responsive est contrôlé dans un navigateur redimensionné ; les performances sur téléphones physiques restent à vérifier.
+Depuis la galerie, je peux :
 
-Les tests couvrent les prix, la compatibilité et la validation des cadres, la conservation des proportions, les limites et l’amorti à 60/120 Hz, l’échappement HTML et les brouillons d’acquisition. Les parcours manuels comprennent le choix et la persistance du cadre, l’accrochage publié, les fiches et les panneaux mobiles.
+- défiler entre les œuvres et ouvrir leur fiche ;
+- explorer un tableau avec le zoom et le glisser, puis revenir à la visite ;
+- retrouver les œuvres enregistrées dans ma sélection ;
+- ouvrir le menu, puis l’atelier, pour ajouter ou modifier une œuvre et choisir son cadre.
 
-## Sources
+La fiche propose une demande d’acquisition liée au tableau. Elle prépare un message à relire et à copier. Aucun message n’est envoyé dans cette version.
 
-Crédits des images et polices : `dist/assets/credits.html`. Conception initiale : `PRODUCT.md` et `DESIGN.md`. Three.js et RoomEnvironment proviennent du paquet npm officiel `three@0.187.0`, sous licence MIT (`dist/vendor/THREE-LICENSE.txt`).
+Sur mobile, les fiches passent sous la scène. Les commandes de zoom et les sorties sont en bas, à portée du pouce. Le tableau reste visible pendant la lecture.
+
+[Voir l’aperçu mobile](docs/images/gallery-mobile.jpg)
+
+## Lancer le projet
+
+J’ai gardé une base simple : HTML, CSS, JavaScript et Three.js 0.187.0. La bibliothèque, les polices et les images sont dans le dépôt. Le navigateur ne dépend pas d’un CDN pour charger la galerie.
+
+Avec Python 3 :
+
+```sh
+python3 -m http.server 4173 --directory dist
+```
+
+Puis ouvrir [localhost:4173](http://localhost:4173). L’atelier est accessible à l’adresse `/#atelier`.
+
+Pour les vérifications, j’utilise Node.js 22 :
+
+```sh
+npm run check
+```
+
+Le projet n’a pas de dépendance npm à installer. `dist/` contient directement les fichiers éditables servis au navigateur ; il n’y a pas de compilation.
+
+## Ce qui est vérifié
+
+Les tests couvrent les prix, les données du catalogue, les cadres et les proportions des visuels. Ils vérifient aussi le calcul des mouvements de caméra, l’ancrage du pincement, les limites du déplacement dans l’image et le contenu des demandes d’acquisition.
+
+Les parcours ont été contrôlés dans un navigateur sur ordinateur et à des largeurs mobiles de 320 et 390 px, ainsi qu’en paysage. Le retour à la fiche conserve une demande en cours. La reprise de visite et le changement d’orientation conservent l’œuvre courante.
+
+Je garde une limite claire : le ressenti tactile et les performances restent à vérifier sur de vrais téléphones iPhone et Android. Les tests de calcul et le redimensionnement du navigateur ne remplacent pas cette étape.
+
+## Ce qui reste un prototype
+
+Les œuvres et les favoris sont enregistrés dans le navigateur. Ils ne sont pas partagés entre visiteurs ou appareils. Changer de domaine crée un autre espace de stockage : les données de la première démo ne migrent pas vers Vercel.
+
+Les titres, les textes et les prix du catalogue sont des exemples. Il n’y a pas de vente réelle, de paiement, de compte vendeur ou de dossier d’authenticité vérifié. Le formulaire d’acquisition n’a pas encore de destinataire configuré.
+
+Le zoom utilise les pixels des visuels disponibles. Je ne peux pas montrer un détail absent du fichier d’origine. La salle adapte aussi la taille d’affichage des œuvres ; ce n’est pas une simulation à l’échelle de leurs dimensions en centimètres.
+
+Pour la suite, je commencerais par les essais sur téléphone, puis par le stockage partagé et les rôles vendeur/acheteur. Un catalogue plus grand demanderait aussi de charger les œuvres progressivement.
+
+## Organisation du dépôt
+
+| Fichier ou dossier | Rôle |
+| --- | --- |
+| `dist/app.js` | Navigation, catalogue et atelier |
+| `dist/world.js` | Scène persistante et interactions |
+| `dist/gallery-scene.js` | Salle, matériaux, lumières et cadres en 3D |
+| `dist/gallery-math.js` | Calculs du scroll, du zoom et des gestes |
+| `dist/artwork.js` | Fiche et demande d’acquisition |
+| `tests.mjs` | Tests sans dépendance externe |
+| `docs/prompts.md` | Mes demandes et les décisions qui en découlent |
+| `docs/architecture.md` | Fonctionnement technique et limites |
+| `CONTRIBUTING.md` | Branches, commits et PR |
+
+L’historique GitHub commence avec l’import du prototype fonctionnel. Les itérations précédentes sont retracées dans le journal des prompts ; je n’ai pas recréé de faux commits pour leur donner un historique après coup. La documentation et la préparation Vercel passent ensuite par une branche et une PR.
+
+Les vérifications s’exécutent sur les PR et sur `main`. Vercel est relié au dépôt : les branches servent aux previews et `main` à la version de démonstration.
+
+## Crédits
+
+Les images viennent d’Unsplash. Les titres et prix du prototype ne décrivent pas les œuvres originales et ne leur attribuent pas un artiste fictif. Les sources figurent dans [les crédits des visuels](dist/assets/credits.html).
+
+Three.js et RoomEnvironment sont distribués sous [licence MIT](dist/vendor/THREE-LICENSE.txt). Newsreader et DM Sans sont accompagnées de leurs licences SIL Open Font License dans `dist/assets/`.
