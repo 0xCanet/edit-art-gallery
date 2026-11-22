@@ -3,9 +3,9 @@ export const MIN_PRICE = 500000;
 export const formatPrice = n => new Intl.NumberFormat('fr-FR',{style:'currency',currency:'EUR',maximumFractionDigits:0}).format(n);
 export const KEY = 'edit-artworks-v1';
 export const seed = [
- {id:'lumiere',frame:'classique',title:'La couleur du silence',artist:'Collection PEINTURE',year:2025,medium:'Acrylique sur toile',category:'Peinture',width:80,height:100,price:500000,description:'Une composition de jaunes et de rouges, traversée de bleu turquoise.',image:'assets/oeuvre-01.jpg',status:'published',demo:true},
- {id:'maree',frame:'chene',title:'Mouvements intérieurs',artist:'Collection PEINTURE',year:2025,medium:'Encres et pigments',category:'Peinture',width:90,height:90,price:780000,description:'Des plages roses et bleues aux contours diffus se superposent.',image:'assets/oeuvre-05.jpg',status:'published',demo:true},
- {id:'reflets',frame:'noir',title:'Reflets, étude n° 3',artist:'Collection PEINTURE',year:2024,medium:'Photographie abstraite',category:'Photographie',width:60,height:90,price:1250000,description:'Des reflets magenta et argentés suivent les plis de la surface.',image:'assets/oeuvre-04.jpg',status:'published',demo:true}
+ {id:'lumiere',frame:'classique',title:'La couleur du silence',artist:'Collection PITTURA',year:2025,medium:'Acrylique sur toile',category:'Peinture',width:80,height:100,price:500000,description:'Une composition de jaunes et de rouges, traversée de bleu turquoise.',image:'assets/oeuvre-01.jpg',status:'published',demo:true},
+ {id:'maree',frame:'chene',title:'Mouvements intérieurs',artist:'Collection PITTURA',year:2025,medium:'Encres et pigments',category:'Peinture',width:90,height:90,price:780000,description:'Des plages roses et bleues aux contours diffus se superposent.',image:'assets/oeuvre-05.jpg',status:'published',demo:true},
+ {id:'reflets',frame:'noir',title:'Reflets, étude n° 3',artist:'Collection PITTURA',year:2024,medium:'Photographie abstraite',category:'Photographie',width:60,height:90,price:1250000,description:'Des reflets magenta et argentés suivent les plis de la surface.',image:'assets/oeuvre-04.jpg',status:'published',demo:true}
 ];
 export const escape = (s='') => String(s).replace(/[&<>"']/g, c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 export function validImage(src){return typeof src==='string' && (/^assets\/oeuvre-0[145]\.jpg$/.test(src)||/^data:image\/(jpeg|png|webp);base64,[A-Za-z0-9+/=]+$/.test(src));}
@@ -30,7 +30,7 @@ export function refreshDemoPresentation(works) {
  return works.map(work=>{
   const example=seed.find(item=>item.id===work.id&&item.image===work.image);
   if(!example||!work.demo)return work;
-  const artist=work.artist==='Collection ÉDIT'?example.artist:work.artist;
+  const artist=['Collection ÉDIT','Collection PEINTURE'].includes(work.artist)?example.artist:work.artist;
   const description=work.description===previousDescriptions[work.id]?example.description:work.description;
   return artist===work.artist&&description===work.description?work:{...work,artist,description};
  });

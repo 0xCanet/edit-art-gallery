@@ -32,8 +32,8 @@ Le compteur dure au moins 1,5 seconde et attend que la scène soit prête. Le fo
 
 ## Le nom et les textes de l’interface
 
-J’ai choisi PEINTURE pour remplacer ÉDIT sur le site. Le mot reste centré dans la navigation et dans le loader. Sa taille s’adapte aux petits écrans pour garder les commandes accessibles.
+Après avoir envisagé PEINTURE, j’ai retenu PITTURA pour remplacer ÉDIT sur le site. Le mot reste centré dans la navigation et dans le loader. Sa taille s’adapte aux petits écrans pour garder les commandes accessibles.
 
 J’ai retiré la signature en bas de la salle, les mentions de démonstration et la ligne catégorie/année au-dessus de la fiche. J’ai aussi raccourci les textes et supprimé les phrases qui répétaient la même intention. Les limites fonctionnelles restent documentées dans le README.
 
-[La fiche allégée sur desktop](images/peinture-desktop.jpg)
+[La fiche allégée sur desktop](images/pittura-desktop.jpg)

@@ -1,4 +1,4 @@
-# Travailler sur PEINTURE
+# Travailler sur PITTURA
 
 Je garde `main` pour la version de démonstration. Pour une modification, je crée une branche courte depuis `main`, par exemple `feat/artwork-story`, `fix/mobile-pinch` ou `docs/readme`.
 
