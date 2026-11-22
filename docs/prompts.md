@@ -104,6 +104,12 @@ Mes captures montraient les mentions de démonstration, la signature de la galer
 
 Le site passe à PEINTURE. Les informations de l’œuvre restent dans la fiche ; les mentions répétées et les phrases décoratives disparaissent. Le formulaire garde son action de préparation et de copie du message. Les limites du projet et l’aide de Codex restent expliquées dans ce dépôt.
 
+## 10. Retenir PITTURA
+
+> PITTURA
+
+J’ai finalement choisi PITTURA parmi les deux noms proposés. Il remplace PEINTURE dans la navigation, le chargement, les fiches et les références d’acquisition. Les œuvres déjà enregistrées gardent leurs réglages et mes textes personnalisés.
+
 ## Ce que je retiens pour la suite
 
 Mes retours sont devenus plus précis quand j’ai pu manipuler le prototype : le focus ne suffisait pas pour regarder une œuvre, une scène isolée ne suffisait pas pour visiter une galerie, et le zoom mobile demandait un travail propre aux gestes tactiles.

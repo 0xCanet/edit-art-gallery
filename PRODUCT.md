@@ -1,4 +1,4 @@
-# PEINTURE
+# PITTURA
 
 Je développe ce prototype pour présenter ma démarche UX/UI à Cauri après une première V1 réalisée en entretien.
 
@@ -8,4 +8,4 @@ J’utilise HTML, CSS, JavaScript et Three.js 0.187.0. Les données restent dans
 
 Je pilote les demandes et les retours de conception avec l’aide de Codex pour la réalisation. Le README et le journal des prompts expliquent cette répartition et les limites des vérifications.
 
-Le site porte désormais le nom PEINTURE. J’ai retiré les mentions de démonstration répétées dans les écrans et les libellés décoratifs ; les limites fonctionnelles et le rôle de Codex restent documentés dans le dépôt.
+Le site porte désormais le nom PITTURA. J’ai retiré les mentions de démonstration répétées dans les écrans et les libellés décoratifs ; les limites fonctionnelles et le rôle de Codex restent documentés dans le dépôt.

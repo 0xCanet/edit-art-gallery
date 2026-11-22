@@ -2,7 +2,7 @@
   "name": "edit-art-gallery",
   "version": "0.1.0",
   "private": true,
-  "description": "PEINTURE, prototype de galerie d’art immersive et atelier de publication.",
+  "description": "PITTURA, prototype de galerie d’art immersive et atelier de publication.",
   "type": "module",
   "engines": { "node": "22.x" },
   "scripts": {

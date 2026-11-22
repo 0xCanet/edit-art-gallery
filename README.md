@@ -1,6 +1,6 @@
-# PEINTURE
+# PITTURA
 
-Le projet a commencé sous le nom ÉDIT. J’ai choisi PEINTURE pour le site.
+Le projet a commencé sous le nom ÉDIT. J’ai choisi PITTURA pour le site.
 
 J’ai repris la V1 réalisée pendant mon premier entretien. Pour le deuxième, je voulais aller plus loin sur l’UX/UI et avoir quelque chose à montrer et à manipuler.
 
