@@ -17,7 +17,7 @@ export function buildAcquisitionDraft(work, {name='',email='',reason,message=''}
     subject:`Demande d’acquisition — ${title}`,
     body:[
       'Bonjour,','',`Je souhaite prendre contact au sujet de l’œuvre « ${title} ».`,
-      `Artiste / collection : ${work.artist}`,`Référence ÉDIT : ${work.id}`,`Encadrement : ${frames[frameFor(work)].label}`,
+      `Artiste / collection : ${work.artist}`,`Référence PEINTURE : ${work.id}`,`Encadrement : ${frames[frameFor(work)].label}`,
       `Prix présenté : ${formatPrice(work.price)}`,
       '',`Objet de ma demande : ${reason}`,message?`\n${message}`:'',
       '',`Nom : ${name}`,`E-mail : ${email}`
