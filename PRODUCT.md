@@ -1,18 +1,9 @@
 # ÉDIT
-<!-- impeccable:product-schema 1 -->
-## Platform
-web
-## Stack
-delegated: HTML, CSS, JavaScript without dependencies; browser-local prototype.
-## Users
-Art buyers browsing works; an owner creating and managing art listings. Buyer/owner roles inferred from the requested marketplace and dashboard; no authentication in this prototype.
-## Product Purpose
-An art marketplace prototype with a landing page and a dashboard to create products.
-## Capabilities and Constraints
-Confirmed: functional simple prototype; add, edit, publish products; browser-local persistence. No shared database, payments or real accounts for this version. Name ÉDIT is provisional and approved. No commercial claims or real artists supplied. Demonstration listings must be identified as such.
-## Brand Commitments
-Luxurious, modern, visually simple. Prioritize the artwork. Use Impeccable and Stark. Build directly in code, as chosen by the user.
-## Product Principles
-- Art is the primary content.
-- Creation is short and understandable.
-- Clearly distinguish demo content and local storage from production commerce.
+
+Je développe ce prototype pour présenter ma démarche UX/UI à Cauri après une première V1 réalisée en entretien.
+
+Le parcours principal est une visite de galerie en 3D, avec découverte au scroll, fiche d’œuvre et exploration rapprochée. L’atelier permet de préparer un accrochage et de choisir un cadre. Le prix minimum de présentation est de 500 000 €.
+
+J’utilise HTML, CSS, JavaScript et Three.js 0.187.0. Les données restent dans le navigateur. Cette version n’a ni paiement, ni authentification, ni stockage partagé. Les œuvres, textes et prix sont des démonstrations.
+
+Je pilote les demandes et les retours de conception avec l’aide de Codex pour la réalisation. Le README et le journal des prompts expliquent cette répartition et les limites des vérifications.
