@@ -4,7 +4,7 @@ import {clamp,dampProgress,galleryState,inspectionView,transformInspection,inspe
 
 export function createWorld(host,onSelect) {
   const cross='<svg viewBox="0 0 24 24" aria-hidden="true"><path d="m6 6 12 12M18 6 6 18"/></svg>';
-  host.innerHTML=`<div class="world-visual" role="img" aria-label="Galerie PITTURA"><div class="world-fallback"><img alt="" hidden><p>Importez un visuel pour préparer l’accrochage.</p></div><canvas aria-hidden="true"></canvas></div><div class="world-tools"><a class="world-exit" href="#galerie" hidden>${cross}Quitter l’œuvre</a><button type="button" class="world-inspect" hidden>Explorer les détails</button><button type="button" class="world-mode" aria-pressed="false">Vue sans animation</button><button type="button" class="world-angle" aria-pressed="false">Voir le cadre de côté</button><p class="world-status" role="status"></p></div><div class="inspection-controls" hidden><button type="button" class="inspection-back">Revenir à la fiche</button><div class="inspection-zoom" role="group" aria-label="Explorer les détails du tableau"><button type="button" data-zoom="out" aria-label="Dézoomer">−</button><output aria-label="Niveau de zoom">100 %</output><button type="button" data-zoom="in" aria-label="Zoomer">+</button><button type="button" data-zoom="reset">Recentrer</button></div><p><span class="inspection-touch-hint">Pincez pour zoomer · Glissez pour explorer</span><span class="inspection-pointer-hint">Molette pour zoomer · Faites glisser pour explorer</span></p></div>`;
+  host.innerHTML=`<div class="world-visual" role="img" aria-label="Galerie Antoine Martin"><div class="world-fallback"><img alt="" hidden><p>Photographies d’Antoine Martin.</p></div><canvas aria-hidden="true"></canvas></div><div class="world-tools"><a class="world-exit" href="#galerie" hidden>${cross}Quitter l’œuvre</a><button type="button" class="world-inspect" hidden>Explorer les détails</button><button type="button" class="world-mode" aria-pressed="false">Vue sans animation</button><button type="button" class="world-angle" aria-pressed="false">Voir le cadre de côté</button><p class="world-status" role="status"></p></div><div class="inspection-controls" hidden><button type="button" class="inspection-back">Revenir à la fiche</button><div class="inspection-zoom" role="group" aria-label="Explorer les détails du tableau"><button type="button" data-zoom="out" aria-label="Dézoomer">−</button><output aria-label="Niveau de zoom">100 %</output><button type="button" data-zoom="in" aria-label="Zoomer">+</button><button type="button" data-zoom="reset">Recentrer</button></div><p><span class="inspection-touch-hint">Pincez pour zoomer · Glissez pour explorer</span><span class="inspection-pointer-hint">Molette pour zoomer · Faites glisser pour explorer</span></p></div>`;
   const canvas=host.querySelector('canvas'),image=host.querySelector('img'),status=host.querySelector('.world-status'),toggle=host.querySelector('.world-mode');
   const inspectButton=host.querySelector('.world-inspect'),inspectionControls=host.querySelector('.inspection-controls'),back=host.querySelector('.inspection-back');
   const motion=matchMedia('(prefers-reduced-motion: reduce)');
@@ -28,7 +28,7 @@ export function createWorld(host,onSelect) {
     const bounds=!inspecting&&panel?.getBoundingClientRect();
     target.right=bounds&&!mobile?Math.max(0,innerWidth-bounds.left):0;
     const hint=inspecting&&mobile?inspectionControls.querySelector('p').getBoundingClientRect():null;
-    target.bottom=inspecting?(mobile&&hint?.height?innerHeight-hint.top+12:100):bounds&&mobile?Math.max(0,innerHeight-bounds.top):mode==='visit'?(document.querySelector('.gallery-cartel')?.getBoundingClientRect().height||150):0;
+    target.bottom=inspecting?(mobile&&hint?.height?innerHeight-hint.top+12:100):bounds&&mobile?Math.max(0,innerHeight-bounds.top):mode==='visit'?((document.querySelector('.gallery-cartel')?.getBoundingClientRect().height||150)+(document.querySelector('.gallery-credit')?.getBoundingClientRect().height||0)):0;
     schedule();
   }
   function stopArrival(){arrivalCancelled=true;target.entrance=0;host.dataset.arriving='false';}
@@ -56,7 +56,7 @@ export function createWorld(host,onSelect) {
     if(work){
       if(image.dataset.source!==work.image){image.dataset.source=work.image||'';fallbackReady=!work.image;if(work.image){image.src=work.image;image.decode().catch(()=>{}).then(()=>{fallbackReady=true;schedule();});}else image.removeAttribute('src');}
       image.hidden=!work.image;host.querySelector('.world-fallback p').hidden=!!work.image;
-      host.querySelector('.world-visual').setAttribute('aria-label',`Galerie PITTURA : ${work.title||'Aperçu'}, ${frames[frameFor(work)].label}`);
+      host.querySelector('.world-visual').setAttribute('aria-label',`Galerie Antoine Martin : ${work.title||'Aperçu'}, ${frames[frameFor(work)].label}`);
       host.dataset.frame=frameFor(work);
     }
     host.style.setProperty('--world-right',`${current.right}px`);host.style.setProperty('--world-bottom',`${current.bottom}px`);host.style.setProperty('--world-top',`${current.top}px`);
@@ -99,7 +99,7 @@ export function createWorld(host,onSelect) {
     }catch(error){
       if(request!==generation)return;
       console.warn('Galerie indisponible :',error);loadingIdentity='';scene?.dispose();scene=null;
-      flat=true;updateMode();status.textContent='La visite continue en vue fixe. Les fiches et l’atelier restent accessibles.';
+      flat=true;updateMode();status.textContent='La visite continue en vue fixe. Les séries restent accessibles.';
     }
   }
   function updateMode(){stopArrival();host.classList.toggle('world-flat',flat);toggle.setAttribute('aria-pressed',String(flat));toggle.textContent=flat?'Activer la 3D':'Vue sans animation';lastTime=0;schedule();}

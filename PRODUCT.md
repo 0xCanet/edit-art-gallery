@@ -1,11 +1,9 @@
-# PITTURA
+# Antoine Martin
 
-Je développe ce prototype pour présenter ma démarche UX/UI à Cauri après une première V1 réalisée en entretien.
+Étude de portfolio photographique dérivée de PITTURA, réalisée le 23 novembre 2026.
 
-Le parcours principal est une visite de galerie en 3D, avec découverte au scroll, fiche d’œuvre et exploration rapprochée. L’atelier permet de préparer un accrochage et de choisir un cadre. Le prix minimum de présentation est de 500 000 €.
+Le visiteur découvre une sélection dans une galerie immersive, consulte les projets dans leur séquence complète, puis peut lire la biographie, parcourir les publications ou contacter le photographe.
 
-J’utilise HTML, CSS, JavaScript et Three.js 0.187.0. Les données restent dans le navigateur. Cette version n’a ni paiement, ni authentification, ni stockage partagé. Les œuvres, textes et prix sont des démonstrations.
+Le site reprend les photographies du site public d’Antoine Martin. Les textes français sont des adaptations éditoriales fondées sur ses descriptions. Il ne propose pas de vente et ne présente aucune légende inventée comme une information documentaire.
 
-Je pilote les demandes et les retours de conception avec l’aide de Codex pour la réalisation. Le README et le journal des prompts expliquent cette répartition et les limites des vérifications.
-
-Le site porte désormais le nom PITTURA. J’ai retiré les mentions de démonstration répétées dans les écrans et les libellés décoratifs ; les limites fonctionnelles et le rôle de Codex restent documentés dans le dépôt.
+La version se développe sur `feat/antoine-martin-portfolio`, dans un dossier de travail distinct. PITTURA conserve son projet de production. La démonstration est exclue de l’indexation par sa balise robots.

@@ -136,10 +136,6 @@ export async function createGalleryScene(canvas,works,onProgress=()=>{}) {
     box(.18,.008,.004,seam,1.55,1.27,.017,bay,false);
     box(.13,.006,.004,seam,1.525,1.24,.017,bay,false);
   }
-  box(.65,.95,.65,plaster,-3.4,.47,1.8);
-  const pedestalShadow=mesh(new THREE.PlaneGeometry(1.2,1.2),floorContact,-3.4,-.008,1.8,room,false);pedestalShadow.rotation.x=-Math.PI/2;
-  const sculpture=mesh(new THREE.TorusKnotGeometry(.25,.065,90,12,2,3),brass,-3.4,1.28,1.8);
-  sculpture.rotation.z=.25;
   const sky=new THREE.MeshBasicMaterial({color:'#edf5fc',toneMapped:false});resources.add(sky);
   box(.06,2.9,4.2,sky,-5.15,2.0,3.4,room,false);
   for(const z of [1.5,3.4,5.3]) box(.09,3.15,.07,plaster,-4.77,2,z);
@@ -208,7 +204,7 @@ export async function createGalleryScene(canvas,works,onProgress=()=>{}) {
       const freeW=Math.max(width*.30,width-layout.right),freeH=Math.max(height*.22,height-layout.top-layout.bottom);
       // Keep the visible mobile room's lens stable when a sheet covers the lower canvas.
       camera.fov=mobile?THREE.MathUtils.radToDeg(2*Math.atan(Math.tan(THREE.MathUtils.degToRad(23))*height/freeH)):46;
-      const focus=state.focus||0,fill=THREE.MathUtils.lerp(.46,.78,focus);
+      const focus=state.focus||0,fill=THREE.MathUtils.lerp(mobile?.68:.57,.82,focus);
       const fit=size=>Math.max(size.outerH/(2*Math.tan(THREE.MathUtils.degToRad(camera.fov/2))*(freeH/height)*fill),size.outerW/(2*Math.tan(THREE.MathUtils.degToRad(camera.fov/2))*camera.aspect*(freeW/width)*fill));
       const from=Math.min(displays.length-1,Math.floor(state.position)),to=Math.min(displays.length-1,from+1);
       const arc=galleryArc(state,mobile),entrance=state.entrance||0,zoom=state.zoom||1;

@@ -1,6 +1,6 @@
 export const frames={
   chene:{label:'Chêne naturel',width:0.075,depth:0.085,color:'#ad8350',metalness:0,roughness:0.72},
-  noir:{label:'Bois noir',width:0.065,depth:0.075,color:'#252421',metalness:0,roughness:0.52},
+  noir:{label:'Bois noir',width:0.035,depth:0.075,color:'#252421',metalness:0,roughness:0.52},
   laiton:{label:'Laiton brossé',width:0.045,depth:0.065,color:'#b39455',metalness:0.78,roughness:0.3},
   classique:{label:'Doré mouluré',width:0.15,depth:0.12,color:'#a89261',metalness:0.84,roughness:0.34},
   sans:{label:'Sans cadre',width:0,depth:0.045,color:'#f3eee2',metalness:0,roughness:1}

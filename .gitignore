@@ -7,3 +7,6 @@ node_modules/
 .openai/
 .impeccable/
 *.tar.gz
+
+research/*.html
+research/original-images/

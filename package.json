@@ -1,13 +1,15 @@
 {
-  "name": "edit-art-gallery",
+  "name": "antoine-martin-portfolio",
   "version": "0.1.0",
   "private": true,
-  "description": "PITTURA, prototype de galerie d’art immersive et atelier de publication.",
+  "description": "Étude de portfolio photographique d’Antoine Martin, adaptée de la galerie PITTURA.",
   "type": "module",
-  "engines": { "node": "22.x" },
+  "engines": {
+    "node": "22.x"
+  },
   "scripts": {
     "check": "node scripts/check.mjs",
-    "test": "node tests.mjs",
-    "start": "python3 -m http.server 4173 --directory dist"
+    "test": "node tests.mjs && node portfolio-tests.mjs",
+    "start": "python3 -m http.server 4174 --directory dist"
   }
 }
