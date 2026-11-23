@@ -4,6 +4,25 @@ import {galleryState,scrollProgress,dampProgress} from './dist/gallery-math.js';
 import {acquisitionReasons,buildAcquisitionDraft,acquisitionMailto} from './dist/acquisition.js';
 import {artworkMarkup} from './dist/artwork.js';
 import {frames,frameFor,displayDimensions} from './dist/frames.js';
+import * as THREE from './dist/vendor/three.module.js';
+import {createGallerySpot} from './dist/gallery-scene.js';
+
+// Both tilted fixtures must keep the recessed lens and light on the housing axis.
+for(const dx of [-.7,.7]) {
+ const position=new THREE.Vector3(dx,3.72,2.2),target=new THREE.Vector3(0,1.7,.1);
+ const surface=new THREE.MeshStandardMaterial();
+ const fixture=createGallerySpot(position,target,{dark:surface,reflector:surface,glow:surface});
+ const bay=new THREE.Group();bay.position.x=6;bay.add(fixture);bay.updateMatrixWorld(true);
+ const lens=fixture.getObjectByName('spot-lens'),spot=fixture.children.find(object=>object.isSpotLight);
+ const axis=target.clone().sub(position).normalize(),origin=fixture.getWorldPosition(new THREE.Vector3());
+ const lensAxis=lens.getWorldPosition(new THREE.Vector3()).sub(origin).normalize();
+ const lightAxis=spot.target.getWorldPosition(new THREE.Vector3()).sub(spot.getWorldPosition(new THREE.Vector3())).normalize();
+ const normal=new THREE.Vector3(0,0,1).applyQuaternion(lens.getWorldQuaternion(new THREE.Quaternion()));
+ assert(axis.distanceTo(lensAxis)<1e-12 && axis.distanceTo(lightAxis)<1e-12);
+ assert(normal.distanceTo(axis)<1e-12);
+ assert(lens.position.y<.135 && lens.geometry.parameters.radius<.095);
+ fixture.traverse(object=>object.geometry?.dispose());surface.dispose();
+}
 assert(seed.every(validWork));
 assert.equal(filterWorks(seed,{query:'SILENCE'}).length,1);
 assert.equal(filterWorks(seed,{category:'Sculpture'}).length,0);

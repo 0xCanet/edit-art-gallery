@@ -110,6 +110,18 @@ Le site passe à PEINTURE. Les informations de l’œuvre restent dans la fiche 
 
 J’ai finalement choisi PITTURA parmi les deux noms proposés. Il remplace PEINTURE dans la navigation, le chargement, les fiches et les références d’acquisition. Les œuvres déjà enregistrées gardent leurs réglages et mes textes personnalisés.
 
+## 11. Reprendre les alignements et donner du relief à la salle
+
+> Je veux qu'on fasse une passe sur l'UX, je vois qu'il n'y as pas de gestion de grilles. La navbar, les boutons et les infos en bas n'ont pas tous la même largeur.
+>
+> Je ne suis pas fan de la typo également, les T n'ont pas la même hauteur. Cherche une typo style luxe sans-serif. Rajoute en dessous du logo "Depuis 2026" en italien. Comme ça, ça fait un logo.
+>
+> Les ampoules ne sont pas centrées dans les luminaires. Améliore la scène 3D. Je trouve que ça c'est encore vachement "flat", ça manque de texture, d'ombres, etc. Possible d'améliorer sans perdre trop de perf ?
+
+Je voulais que l’interface suive une grille visible dans ses alignements. La navigation, les commandes et les informations de l’œuvre partagent maintenant les mêmes marges. Jost remplace les anciennes polices, avec « Dal 2026 » sous PITTURA.
+
+La salle garde sa structure : les spots sont corrigés, les matières plus présentes et la lumière moins uniforme. Le rendu conserve une seule carte d’ombres et s’arrête au repos. Les contrôles sur navigateur couvrent le bureau, les petites largeurs et le paysage. Les mesures locales et leurs limites sont détaillées dans l’architecture ; les essais sur téléphone physique restent à faire.
+
 ## Ce que je retiens pour la suite
 
 Mes retours sont devenus plus précis quand j’ai pu manipuler le prototype : le focus ne suffisait pas pour regarder une œuvre, une scène isolée ne suffisait pas pour visiter une galerie, et le zoom mobile demandait un travail propre aux gestes tactiles.
