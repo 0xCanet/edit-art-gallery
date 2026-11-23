@@ -3,6 +3,19 @@ import {RoomEnvironment} from './vendor/RoomEnvironment.js';
 import {frames,frameFor,displayDimensions} from './frames.js';
 import {galleryArc} from './gallery-math.js';
 
+export function createGallerySpot(position,target,{dark,reflector,glow}) {
+  const fixture=new THREE.Group();fixture.position.copy(position);
+  fixture.quaternion.setFromUnitVectors(new THREE.Vector3(0,1,0),target.clone().sub(position).normalize());
+  const profile=[[0,-.135],[.088,-.135],[.095,-.128],[.095,.128],[.091,.135],[.084,.135],[.084,.09]].map(([x,y])=>new THREE.Vector2(x,y));
+  const shell=new THREE.Mesh(new THREE.LatheGeometry(profile,24),dark);
+  shell.castShadow=true;fixture.add(shell);
+  const lining=new THREE.Mesh(new THREE.CylinderGeometry(.088,.065,.045,24,1,true),reflector);lining.position.y=.108;fixture.add(lining);
+  const lens=new THREE.Mesh(new THREE.CircleGeometry(.065,24),glow);lens.name='spot-lens';lens.rotation.x=-Math.PI/2;lens.position.y=.088;fixture.add(lens);
+  const spot=new THREE.SpotLight('#fff4df',11,8,Math.PI/5,1,2);
+  spot.position.y=.14;spot.target.position.set(0,3,0);fixture.add(spot,spot.target);
+  return fixture;
+}
+
 export async function createGalleryScene(canvas,works,onProgress=()=>{}) {
   const renderer=new THREE.WebGLRenderer({canvas,antialias:true,alpha:false,powerPreference:'low-power'});
   renderer.outputColorSpace=THREE.SRGBColorSpace;
@@ -18,17 +31,18 @@ export async function createGalleryScene(canvas,works,onProgress=()=>{}) {
   const resources=new Set(),displays=[],bays=[],dividers=[],versions=works.map(()=>0);
   let disposed=false,width=0,height=0,step=6,activeIndex=0;
   const material=options=>{const result=new THREE.MeshStandardMaterial(options);resources.add(result);return result;};
-  const plaster=material({color:'#efefeb',roughness:0.96});
-  const stone=material({color:'#bdbbb2',roughness:0.78,metalness:0.02});
-  const seam=material({color:'#c7c7bf',roughness:1});
-  const dark=material({color:'#292a27',roughness:0.45,metalness:0.45});
+  const plaster=material({color:'#eeebe3',roughness:0.96});
+  const stone=material({color:'#c8c0b0',roughness:0.82,metalness:0.02});
+  const seam=material({color:'#a6a093',roughness:1});
+  const dark=material({color:'#242521',roughness:0.6,metalness:0.35});
+  const reflector=material({color:'#c6c0b2',roughness:.28,metalness:.8,side:THREE.DoubleSide});
   const brass=material({color:'#a88b55',roughness:0.3,metalness:0.75});
   const linen=material({color:'#f0e8d8',roughness:1});
   const glow=new THREE.MeshBasicMaterial({color:'#fff9e9',toneMapped:false});resources.add(glow);
   const environment=new RoomEnvironment();
   const pmrem=new THREE.PMREMGenerator(renderer);
   const env=pmrem.fromScene(environment,0.06,0.1,100);
-  room.environment=env.texture;room.environmentIntensity=0.65;
+  room.environment=env.texture;room.environmentIntensity=0.38;
   environment.dispose();pmrem.dispose();
 
   function texture(kind) {
@@ -40,7 +54,7 @@ export async function createGalleryScene(canvas,works,onProgress=()=>{}) {
       const noise=(random%100)/100;
       const cloud=Math.sin(x*.023+Math.cos(y*.031))*Math.cos(y*.017+x*.006);
       const grain=Math.sin(x*.48+Math.sin(y*.012)*4+Math.sin(x*.021)*2);
-      const value=kind==='wood'?155+grain*16+cloud*12+noise*15:kind==='stone'?213+cloud*7+noise*11:kind==='metal'?212+Math.sin(y*2.9)*14+noise*8:220+noise*20;
+      const value=kind==='wood'?166+grain*12+cloud*10+noise*12:kind==='stone'?222+cloud*14+noise*9:kind==='metal'?212+Math.sin(y*2.9)*14+noise*8:239+cloud*5+noise*13;
       const at=(y*512+x)*4;
       pixels.data[at]=value;pixels.data[at+1]=value;pixels.data[at+2]=value;pixels.data[at+3]=255;
     }
@@ -51,8 +65,8 @@ export async function createGalleryScene(canvas,works,onProgress=()=>{}) {
     const map=new THREE.CanvasTexture(c);map.wrapS=map.wrapT=THREE.RepeatWrapping;resources.add(map);return map;
   }
   const woodTexture=texture('wood'),plasterTexture=texture('plaster'),stoneTexture=texture('stone'),metalTexture=texture('metal');
-  plasterTexture.repeat.set(7,3);plaster.bumpMap=plasterTexture;plaster.bumpScale=0.004;
-  stoneTexture.repeat.set(Math.max(works.length,1)*3,6);stone.map=stoneTexture;stone.bumpMap=stoneTexture;stone.bumpScale=0.006;
+  plasterTexture.repeat.set(12,3);plaster.map=plasterTexture;plaster.bumpMap=plasterTexture;plaster.bumpScale=.012;
+  stoneTexture.repeat.set(Math.max(works.length,1)*3,6);stone.map=stoneTexture;stone.bumpMap=stoneTexture;stone.bumpScale=.014;stone.roughnessMap=stoneTexture;
   const oak=material({color:'#af926a',roughness:0.58,map:woodTexture,bumpMap:woodTexture,bumpScale:.007});
   const frameMaterials=Object.fromEntries(Object.entries(frames).map(([id,profile])=>[id,material({color:profile.color,metalness:profile.metalness,roughness:profile.roughness,...(id==='chene'||id==='noir'?{map:woodTexture,bumpMap:woodTexture,bumpScale:.004}:id==='sans'?{}:{roughnessMap:metalTexture,bumpMap:metalTexture,bumpScale:.001})})]));
   function softContact() {
@@ -61,7 +75,14 @@ export async function createGalleryScene(canvas,works,onProgress=()=>{}) {
     const map=new THREE.CanvasTexture(c);resources.add(map);return map;
   }
   const contactMap=softContact();
-  const contact= new THREE.MeshBasicMaterial({map:contactMap,transparent:true,opacity:.25,depthWrite:false,toneMapped:false});resources.add(contact);
+  const contact= new THREE.MeshBasicMaterial({map:contactMap,transparent:true,opacity:.38,depthWrite:false,toneMapped:false});resources.add(contact);
+  const floorContact=contact.clone();floorContact.opacity=.17;resources.add(floorContact);
+  const wash=document.createElement('canvas');wash.width=16;wash.height=128;
+  const washContext=wash.getContext('2d'),gradient=washContext.createLinearGradient(0,0,0,128);
+  gradient.addColorStop(0,'rgba(47,40,31,0)');gradient.addColorStop(.65,'rgba(47,40,31,.025)');gradient.addColorStop(1,'rgba(47,40,31,.22)');
+  washContext.fillStyle=gradient;washContext.fillRect(0,0,16,128);
+  const washMap=new THREE.CanvasTexture(wash);resources.add(washMap);
+  const wallContact=new THREE.MeshBasicMaterial({map:washMap,transparent:true,depthWrite:false,toneMapped:false});resources.add(wallContact);
 
   function mesh(geometry,surface,x,y,z,parent=room,casts=true) {
     resources.add(geometry);const object=new THREE.Mesh(geometry,surface);
@@ -79,17 +100,19 @@ export async function createGalleryScene(canvas,works,onProgress=()=>{}) {
   box(.24,3.4,3.5,plaster,-5,2.1,7.85);
   box(.24,4.3,10,plaster,(works.length-1)*6+5,2.15,4.5);
   box(length,.10,.07,stone,center,.05,-.035);
+  mesh(new THREE.PlaneGeometry(length,.42),wallContact,center,.21,-.075,room,false);
   for(let x=-5;x<length-5;x+=1.5) box(.009,.006,11,seam,x,-.014,4.5,room,false);
   for(let z=1;z<10;z+=1.5) box(length,.006,.009,seam,center,-.014,z,room,false);
   box(length,.035,.16,dark,center,3.93,2.2);
 
-  room.add(new THREE.HemisphereLight('#eef5ff','#d8d1c2',.85));
-  const daylight=new THREE.DirectionalLight('#fff8ee',2.15);
-  daylight.position.set(center-4,8,4);daylight.target.position.set(center,0,1.4);
+  room.add(new THREE.HemisphereLight('#e8f0fa','#b8a58a',.48));
+  const daylight=new THREE.DirectionalLight('#fff3df',2.8);
+  daylight.position.set(center-9,9,6);daylight.target.position.set(center,0,1.4);
   daylight.castShadow=true;daylight.shadow.mapSize.set(2048,2048);
   daylight.shadow.camera.left=-length/2-3;daylight.shadow.camera.right=length/2+3;
   daylight.shadow.camera.top=9;daylight.shadow.camera.bottom=-8;
-  daylight.shadow.normalBias=.018;daylight.shadow.bias=-.00008;daylight.shadow.radius=6;daylight.shadow.blurSamples=12;
+  daylight.shadow.camera.near=.5;daylight.shadow.camera.far=40;
+  daylight.shadow.normalBias=.012;daylight.shadow.bias=-.00008;daylight.shadow.radius=4;daylight.shadow.blurSamples=8;
   room.add(daylight,daylight.target);
 
   for(let i=0;i<works.length;i++) {
@@ -102,21 +125,19 @@ export async function createGalleryScene(canvas,works,onProgress=()=>{}) {
     box(.10,.20,6,plaster,2.4,4.06,2.8,bay);
     box(4.6,.10,.10,plaster,0,4.06,.8,bay);
     for(const dx of [-.7,.7]) {
-      const spot=new THREE.SpotLight('#fff8ef',8,8,Math.PI/4.5,1,2);
-      spot.position.set(dx,3.75,2.2);spot.target.position.set(0,1.7,.1);bay.add(spot,spot.target);
-      const fixture=mesh(new THREE.CylinderGeometry(.095,.095,.27,20),dark,dx,3.72,2.2,bay);
-      fixture.quaternion.setFromUnitVectors(new THREE.Vector3(0,1,0),new THREE.Vector3(-dx,-2.05,-2.1).normalize());
-      const bulb=mesh(new THREE.CircleGeometry(.07,20),glow,dx,3.6,2.08,bay,false);
-      bulb.rotation.x=-Math.PI/4;
+      const fixture=createGallerySpot(new THREE.Vector3(dx,3.72,2.2),new THREE.Vector3(0,1.7,.1),{dark,reflector,glow});
+      fixture.traverse(object=>{if(object.geometry)resources.add(object.geometry);});bay.add(fixture);
     }
     box(1.65,.10,.54,oak,2.15,.48,2.8,bay);
     box(.07,.42,.40,dark,1.55,.22,2.8,bay);
     box(.07,.42,.40,dark,2.75,.22,2.8,bay);
+    const benchShadow=mesh(new THREE.PlaneGeometry(2.15,1.05),floorContact,2.15,-.009,2.8,bay,false);benchShadow.rotation.x=-Math.PI/2;
     box(.28,.13,.017,linen,1.55,1.25,.005,bay,false);
     box(.18,.008,.004,seam,1.55,1.27,.017,bay,false);
     box(.13,.006,.004,seam,1.525,1.24,.017,bay,false);
   }
   box(.65,.95,.65,plaster,-3.4,.47,1.8);
+  const pedestalShadow=mesh(new THREE.PlaneGeometry(1.2,1.2),floorContact,-3.4,-.008,1.8,room,false);pedestalShadow.rotation.x=-Math.PI/2;
   const sculpture=mesh(new THREE.TorusKnotGeometry(.25,.065,90,12,2,3),brass,-3.4,1.28,1.8);
   sculpture.rotation.z=.25;
   const sky=new THREE.MeshBasicMaterial({color:'#edf5fc',toneMapped:false});resources.add(sky);

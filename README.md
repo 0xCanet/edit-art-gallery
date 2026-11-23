@@ -10,7 +10,7 @@ Ce dépôt accompagne ma présentation à Cauri. J’y montre le prototype, mais
 
 [Essayer la démo](https://edit-art-gallery.vercel.app) · [Lire mes prompts](docs/prompts.md) · [Comprendre le code](docs/architecture.md)
 
-![La galerie sur ordinateur](docs/images/gallery-desktop.jpg)
+![La galerie sur ordinateur](docs/images/gallery-ux-desktop.png)
 
 ## Ce que je voulais travailler
 
@@ -64,7 +64,7 @@ La fiche propose une demande d’acquisition liée au tableau. Elle prépare un 
 
 Sur mobile, les fiches passent sous la scène. Les commandes de zoom et les sorties sont en bas, à portée du pouce. Le tableau reste visible pendant la lecture.
 
-[Voir l’aperçu mobile](docs/images/gallery-mobile.jpg)
+[Voir l’aperçu mobile](docs/images/gallery-ux-mobile.png)
 
 ## Lancer le projet
 
@@ -127,4 +127,4 @@ Les vérifications s’exécutent sur les PR et sur `main`. Vercel est relié au
 
 Les images viennent d’Unsplash. Les titres et prix du prototype ne décrivent pas les œuvres originales et ne leur attribuent pas un artiste fictif. Les sources figurent dans [les crédits des visuels](dist/assets/credits.html).
 
-Three.js et RoomEnvironment sont distribués sous [licence MIT](dist/vendor/THREE-LICENSE.txt). Newsreader et DM Sans sont accompagnées de leurs licences SIL Open Font License dans `dist/assets/`.
+Three.js et RoomEnvironment sont distribués sous [licence MIT](dist/vendor/THREE-LICENSE.txt). Jost, créée par Owen Earl / indestructible type*, est accompagnée de sa licence SIL Open Font License dans `dist/assets/Jost-OFL.txt`. Les deux fichiers WOFF2 sont servis localement.

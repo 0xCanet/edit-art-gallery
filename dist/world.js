@@ -14,7 +14,7 @@ export function createWorld(host,onSelect) {
   const started=performance.now();
   let loadingProgress=0,displayedProgress=0,readyAt=null,fontsReady=false,fallbackReady=false,sceneReady=false,loaderRemoved=false;
   document.body.classList.add('is-loading');host.inert=true;document.querySelector('.skip').inert=true;document.querySelector('#main').inert=true;document.querySelector('#header').inert=true;
-  Promise.allSettled([document.fonts.load('400 64px Newsreader'),document.fonts.load('400 16px "DM Sans"')]).then(()=>{fontsReady=true;loadingProgress=Math.max(loadingProgress,.1);schedule();});
+  Promise.allSettled([document.fonts.load('300 64px Jost'),document.fonts.load('400 16px Jost')]).then(()=>{fontsReady=true;loadingProgress=Math.max(loadingProgress,.1);schedule();});
   let current={progress:0,focus:0,angle:0,right:0,bottom:150,top:88,zoom:1,x:0,y:0,entrance:1},target={...current};
   const key=work=>JSON.stringify([work.id,work.image,frameFor(work)]);
   const observer=new ResizeObserver(layout),pointers=new Map();

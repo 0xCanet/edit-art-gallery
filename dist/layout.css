@@ -1,0 +1,102 @@
+/* One twelve-column grid frames the room, navigation and artwork caption. */
+:root{--header-height:96px}
+h1,h2{font-weight:300;letter-spacing:-.025em;line-height:1.12}
+#header .wrap{max-width:none;padding-inline:var(--page-inset)}
+#header .site-header{height:var(--header-height);grid-template-columns:repeat(12,minmax(0,1fr));gap:var(--grid-gap);padding:0}
+#header .nav-left{grid-column:1/5}
+#header .brand{grid-column:5/9;display:flex;flex-direction:column;justify-content:center;gap:8px;min-height:64px;font:400 36px/1 var(--display);letter-spacing:.18em;padding-left:.18em}
+#header .brand-name{font:inherit;letter-spacing:inherit;margin:0;vertical-align:baseline}
+.brand-since{display:block;font:400 9px/1.2 var(--body);letter-spacing:.26em;text-transform:uppercase;text-align:center}
+#header .nav-right{grid-column:9/13}
+#header .nav-left,#header .nav-right{gap:24px;min-width:0}
+.world-tools{left:var(--page-inset);right:var(--page-inset);top:calc(var(--header-height) + 16px);max-width:calc(100% - var(--world-right) - 2*var(--page-inset));gap:8px}
+.world-tools button,.world-tools a{min-height:44px;font-size:13px;padding:10px 16px}
+.world-signature{left:var(--page-inset)}
+.gallery-eyebrow,.gallery-mode{right:var(--page-inset)}
+.gallery-status{left:var(--page-inset);right:var(--page-inset)}
+.gallery-cartel{display:block;padding:24px var(--page-inset);border-color:#cec9bd;background:#faf9f6f5}
+.gallery-cartel-inner{display:grid;grid-template-columns:repeat(12,minmax(0,1fr));gap:var(--grid-gap);align-items:center}
+.gallery-cartel-inner>*{min-width:0}
+.gallery-label{grid-column:span 5}
+.gallery-label h1{font-size:clamp(26px,2.4vw,36px);line-height:1.15;font-weight:300;letter-spacing:-.025em;margin-bottom:8px}
+.gallery-label p{font-size:13px}
+.gallery-purchase{grid-column:span 5;display:grid;grid-template-columns:auto 44px auto;justify-content:end;gap:12px}
+.gallery-price{font-size:26px;font-weight:400;letter-spacing:-.02em}
+.gallery-detail{grid-column:auto;min-height:48px;padding-inline:22px}
+.gallery-pagination{grid-column:span 2;justify-content:flex-end;padding-left:12px;gap:0}
+.gallery-pagination .gallery-count{min-width:56px;font-size:13px}
+.gallery-pagination button{flex-shrink:0;min-width:44px;font-size:23px}
+.gallery-scroll{bottom:24px;color:#48463f}
+.world-panel{right:var(--page-inset);max-width:calc(100vw - 2*var(--page-inset));top:calc(var(--header-height) + 16px);height:calc(100dvh - var(--header-height) - 40px)}
+.configurator .preview-panel{left:var(--page-inset)}
+.inspection-back{right:var(--page-inset)}
+.loader-logo{display:grid;justify-items:center;gap:16px}
+.loader-brand{font:300 clamp(44px,6vw,72px)/1 var(--display);letter-spacing:.18em;padding-left:.18em}
+.loader-logo .brand-since{font-size:10px}
+@media(min-width:900px) and (max-width:1199px){
+  :root{--grid-gap:20px}
+  #header .nav-left,#header .nav-right{gap:18px}
+  .gallery-label{grid-column:span 5}
+  .gallery-purchase{grid-column:span 4;grid-template-columns:minmax(0,1fr) 44px;gap:4px 12px}
+  .gallery-detail{grid-column:1/-1}
+  .gallery-pagination{grid-column:span 3}
+  .gallery-price{font-size:24px}
+}
+@media(max-width:899px){
+  :root{--header-height:80px;--page-gutter:20px;--grid-gap:16px}
+  #header .wrap{padding-left:max(var(--page-inset),env(safe-area-inset-left));padding-right:max(var(--page-inset),env(safe-area-inset-right))}
+  #header .site-header{grid-template-columns:minmax(0,1fr) auto minmax(0,1fr);gap:16px}
+  #header .nav-left{grid-column:1}
+  #header .brand{grid-column:2;font-size:28px;gap:7px;min-height:56px;letter-spacing:.14em;padding-left:.14em}
+  #header .nav-right{grid-column:3}
+  #header .nav-left,#header .nav-right{gap:12px}
+  .brand-since{font-size:8px;letter-spacing:.22em}
+  .world-tools{left:var(--page-inset);right:var(--page-inset);max-width:calc(100% - 2*var(--page-inset));top:calc(var(--header-height) + 12px)}
+  .world-tools button,.world-tools a{font-size:12px;padding-inline:12px}
+  .gallery-cartel{padding:16px var(--page-inset) calc(8px + env(safe-area-inset-bottom))}
+  .gallery-cartel-inner{gap:8px}
+  .gallery-label,.gallery-purchase,.gallery-pagination{grid-column:1/-1}
+  .gallery-label h1{font-size:28px;line-height:1.12;margin-bottom:6px}
+  .gallery-label p{font-size:12px}
+  .gallery-purchase{grid-template-columns:minmax(0,1fr) 44px;gap:6px 12px}
+  .gallery-price{font-size:23px}
+  .gallery-detail{grid-column:1/-1;min-height:48px}
+  .gallery-pagination{justify-content:space-between;padding:0;border:0}
+  .gallery-pagination button{min-height:44px}
+  .world-panel{right:0;top:auto;bottom:0;max-width:none;height:55dvh;padding-inline:var(--page-inset)}
+  .catalogue-overlay{height:61dvh}
+  .management-panel{height:65dvh}
+  .configurator-form{height:59dvh}
+  .artwork-page.world-panel{padding-inline:var(--page-inset)}
+  .world-panel .artwork-intro h1{font-size:34px}
+  [data-mode="detail"] .world-tools{left:var(--page-inset);right:var(--page-inset)}
+  .inspection-controls .inspection-back{right:max(var(--page-inset),env(safe-area-inset-right));transform:none}
+}
+@media(max-width:420px){
+  :root{--page-gutter:16px}
+  #header .site-header{gap:8px}
+  #header .brand{font-size:clamp(22px,6.5vw,27px)}
+  #header .nav-right{gap:0}
+  #header .nav-left .nav-link{font-size:12px}
+  .world-tools button,.world-tools a{font-size:12px;padding-inline:10px}
+  .gallery-label h1{font-size:26px}
+}
+@media(max-width:360px){
+  #header .site-header{gap:4px}
+  #header .brand{font-size:20px}
+}
+@media(max-height:500px) and (orientation:landscape){
+  :root{--header-height:64px;--page-gutter:20px}
+  #header .brand{font-size:24px;min-height:52px;gap:5px}
+  .world-tools{top:calc(var(--header-height) + 8px)}
+  .gallery-cartel{padding-block:10px}
+  .gallery-cartel-inner{grid-template-columns:minmax(0,1fr) minmax(0,1fr) auto;gap:16px}
+  .gallery-label,.gallery-purchase,.gallery-pagination{grid-column:auto}
+  .gallery-label h1{font-size:23px}
+  .gallery-purchase{gap:0 8px}
+  .gallery-price{font-size:21px}
+  .gallery-detail{min-height:44px}
+  .gallery-pagination{gap:0}
+  .world-panel{top:calc(var(--header-height) + 12px);bottom:76px;right:var(--page-inset);width:46vw;height:auto}
+  .artwork-page.world-panel{top:calc(var(--header-height) + 12px);right:var(--page-inset)}
+}

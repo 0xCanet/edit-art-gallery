@@ -22,6 +22,14 @@ Les images JPG/PNG/WebP sont réduites à 1400 px avant stockage. Brouillons, pu
 
 Le rendu s’arrête au repos. L’amorti est calculé selon le temps écoulé ; résolution limitée à 1,4× sur mobile et 1,75× sur desktop. Le moteur reste actif entre les pages et libère la scène lors d’un changement de composition de l’exposition. Cette version charge toutes les œuvres de la petite exposition ; un grand catalogue demanderait un chargement progressif et une limitation des éclairages.
 
+## Grille, identité et matières
+
+La navigation, les commandes de visite et le cartel partagent une même largeur maximale de 1440 px et les mêmes marges adaptatives. `dist/layout.css` rassemble cette grille de douze colonnes et ses variantes mobiles. Les panneaux conservent leurs commandes de sortie en bas sur téléphone. Le logo associe PITTURA en Jost et « Dal 2026 ». La même famille sert aux titres et à l’interface ; ses fichiers WOFF2 sont hébergés dans le dépôt, avec leur licence.
+
+Les spots regroupent le corps, le réflecteur, la lentille et la lumière dans un repère commun : leur inclinaison ne peut plus décentrer l’ampoule. Les matériaux réutilisent les quatre textures procédurales existantes, avec davantage de variation de couleur, de relief et de rugosité. Une petite texture de dégradé ajoute une ombre douce à la jonction mur/sol ; les ombres des bancs et du socle réutilisent celle des cadres. L’éclairage ambiant est moins uniforme et la lumière du jour dessine des ombres obliques.
+
+La passe conserve une seule carte d’ombres de 2048 × 2048, calculée quand la composition change, les plafonds de résolution et l’arrêt au repos. Aucun effet de post-traitement n’est ajouté. Sur la même vue locale de 1800 × 987 px à DPR 2, un échantillon de 90 rendus avec synchronisation WebGL a donné une médiane de 0,9 ms avant et de 1,1 ms après ; le 95e percentile passe de 1,6 à 3,3 ms. Au dernier accrochage, on passe de 117 à 128 appels de rendu et de 13 à 14 textures. Ces mesures ponctuelles sur cet ordinateur ne sont ni une mesure du défilement complet, ni une garantie de performance sur téléphone.
+
 ## Gestes et lecture sur mobile
 
 La visite conserve le scroll natif. Chaque étape dispose de 145 svh ; après la fin du défilement, la caméra se pose sur l’accrochage le plus proche. Cette aide attend la fin du contact et ne s’active pas pendant un zoom de page. La hauteur visible suit les barres du navigateur sans changer la distance de visite entre les œuvres ; une rotation conserve l’œuvre courante.
